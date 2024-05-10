@@ -11,7 +11,7 @@ module Cv4SDK
         else
           api_uri(url_or_path)
         end
-      uri.query = URI.encode_www_form(filters) unless filters.empty?
+      uri.query = URI.encode_www_form(filters) unless filters.nil? || filters.empty?
       headers ||= request_headers
       res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
         req = Net::HTTP::const_get(method.capitalize).new(uri.request_uri, headers)
@@ -19,8 +19,17 @@ module Cv4SDK
         http.request(req)
       end
       raise "ResponseError 408 RequestTimeout for #{uri.request_uri}" if res.nil?
-      body_data = res.body.to_s.empty? ? {} : JSON.load(res.body.to_s)
-      if res.is_a?(Net::HTTPOK)
+      body_data =
+        if res.body.to_s.empty?
+          {}
+        else
+          begin
+            JSON.load(res.body.to_s)
+          rescue JSON::ParserError
+            { "message" => res.body.to_s }
+          end
+        end
+      if res.is_a?(Net::HTTPOK) || res.is_a?(Net::HTTPCreated)
         body_data
       else
         raise "ResponseError #{res.code} #{res.message} for #{uri.request_uri} (params : #{body_data})"
@@ -29,9 +38,11 @@ module Cv4SDK
     end
 
     def request_headers
-      auth_token = Cv4SDK.get_token
+      #auth_token = Cv4SDK.get_token
       {
-        "token" => auth_token,
+        #"token" => auth_token,
+        "username" => Cv4SDK.config.user_name,
+        "password" => Cv4SDK.config.password,
         "Content-Type" => "application/json;charset=Cp1252"
       }
     end

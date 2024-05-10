@@ -3,7 +3,8 @@ require_relative "cv4_sdk/request"
 require_relative "cv4_sdk/authorization_token"
 require_relative "cv4_sdk/resources/base"
 require_relative "cv4_sdk/resources/investisseur"
-require_relative "cv4_sdk/resources/crm"
+require_relative "cv4_sdk/resources/crm/personne"
+require_relative "cv4_sdk/resources/crm/societe"
 
 
 module Cv4SDK
