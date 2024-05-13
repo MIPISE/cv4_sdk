@@ -18,7 +18,11 @@ module Cv4SDK
         req.body = MultiJson.dump(params) unless params.empty?
         http.request(req)
       end
-      raise "ResponseError 408 RequestTimeout for #{uri.request_uri}" if res.nil?
+
+      if res.nil?
+        return { "error" => { "code" => "408", "message" => "RequestTimeout for #{uri.request_uri}", "uri" => uri.request_uri, origin_params: params}}
+      end
+
       body_data =
         if res.body.to_s.empty?
           {}
@@ -32,8 +36,7 @@ module Cv4SDK
       if res.is_a?(Net::HTTPOK) || res.is_a?(Net::HTTPCreated)
         body_data
       else
-        raise "ResponseError #{res.code} #{res.message} for #{uri.request_uri} (params : #{body_data})"
-        res
+        return { "error" => { "code" => res.code, "message" => res.message, params: body_data, "uri" => uri.request_uri, origin_params: params } }
       end
     end
 

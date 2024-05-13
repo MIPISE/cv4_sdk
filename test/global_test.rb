@@ -40,4 +40,47 @@ test "crm societe" do
   # assert (res["raisonSociale"] == raisonSociale)
 end
 
+test "crm beneficiary link to societe" do
+  societeCrmId = 10
+  contactCrmId = 11
+  res = Cv4SDK::Resources::Crm::Societe.create_or_update({ systemId: societeCrmId, raisonSociale: "SomeRaisonSociale", devise: "EUR" })
+  assert res["error"].nil?
+  res = Cv4SDK::Resources::Crm::Personne.create_or_update({systemId: contactCrmId, nom: "Doe", prenom: "Jane", email: "jane.doe@test.com"})
+  assert res["error"].nil?
+  # systemId: "Beneficiaire1",
+  res = Cv4SDK::Resources::Crm::Beneficiaire.create_or_update({systemIdSource: societeCrmId, systemIdBeneficiaire: contactCrmId})
+  assert res["error"].nil?
+end
 
+test "utils lists" do
+  %w[civilites departements forme-juridique organes-direction roles secteur-activite-ste status-mandataire type-beneficiaire type-societe types-role].each do |scope|
+    res = Cv4SDK::Resources::Util.send(scope.gsub("-", "_"))
+    if res.is_a?(Array)
+    else
+      binding.irb
+    end
+    #assert res.is_a?(Array)
+  end
+end
+
+test "crm role creation" do
+  societeCrmId = 10
+  representantCrmId = 12
+  res = Cv4SDK::Resources::Crm::Societe.create_or_update({ systemId: societeCrmId, raisonSociale: "SomeRaisonSociale", devise: "EUR" })
+  assert res["error"].nil?
+  res = Cv4SDK::Resources::Crm::Personne.create_or_update({systemId: representantCrmId, nom: "Doe", prenom: "Donatella", email: "donatella.doe@test.com"})
+  assert res["error"].nil?
+  # systemId: "Beneficiaire1",
+  res =
+    Cv4SDK::Resources::Crm::Role
+      .create_or_update(
+        {
+          systemIdCible: societeCrmId,
+          typeRole: Cv4SDK.utils.get_id_from("types-role", "Dirigeants"),
+          systemIdContact: societeCrmId,
+          crmIdRepresentePar: representantCrmId,
+          role: Cv4SDK.utils.get_id_from("roles", "Gérant")
+        }
+      )
+  assert res["error"].nil?
+end

@@ -7,7 +7,7 @@ module Cv4SDK
         def api_namespace
           name.gsub("Cv4SDK::Resources::", "").split("::").map do |scope|
             case scope
-              when "Crm" then "crm"
+              when "Crm", "Beneficiaire" then scope.downcase
               else
                 "#{scope.downcase}s"
             end
@@ -18,13 +18,26 @@ module Cv4SDK
           if self == Base
             raise NotImplementedError.new("Resource is an abstract class and must not be used directly.")
           else
-            scope ||= []
+            scope =
+              case scope.class.name
+                when "NilClass" then []
+                when "Array" then scope
+                else
+                  [scope]
+              end
             prefix = namespace.is_a?(Array) ? namespace : [namespace]
             scope = prefix + scope
             scope << id if id
             scope.inject(Cv4SDK.api_uri) do |memo, scope|
               "#{memo}/#{CGI.escape(scope)}"
             end
+          end
+        end
+
+
+        def self.get_request(scope)
+          define_method scope.gsub("-", "_") do
+            Cv4SDK.request(:get, url(scope: scope))
           end
         end
 
