@@ -12,7 +12,7 @@ module Cv4SDK
           api_uri(url_or_path)
         end
       uri.query = URI.encode_www_form(filters) unless filters.nil? || filters.empty?
-      headers ||= request_headers
+      headers ||= request_headers(auth_mode: (method.to_sym == :get ? :token : :credentials))
       res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
         req = Net::HTTP::const_get(method.capitalize).new(uri.request_uri, headers)
         req.body = MultiJson.dump(params) unless params.empty?
@@ -37,14 +37,15 @@ module Cv4SDK
       end
     end
 
-    def request_headers
-      #auth_token = Cv4SDK.get_token
-      {
-        #"token" => auth_token,
-        "username" => Cv4SDK.config.user_name,
-        "password" => Cv4SDK.config.password,
-        "Content-Type" => "application/json;charset=Cp1252"
-      }
+    def request_headers(auth_mode: :token)
+      headers = {"Content-Type" => "application/json;charset=Cp1252"}
+      if auth_mode.to_sym == :token
+        headers["token"] = Cv4SDK.get_token
+      else
+        headers["username"] = Cv4SDK.config.user_name
+        headers["password"] = Cv4SDK.config.password
+      end
+      headers
     end
   end
 end

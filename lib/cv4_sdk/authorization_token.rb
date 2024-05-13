@@ -11,7 +11,7 @@ module Cv4SDK
     def get_token
       token = storage.get
       if token.nil?
-        res = Cv4SDK.request(:get, "/authentifications/head", {}, headers: {"username" => Cv4SDK.config.user_name, "password" => Cv4SDK.config.password})
+        res = Cv4SDK.request(:get, "/authentifications/head", {}, headers: request_headers(auth_mode: :credentials))
         token = res["token"]
         storage.store(token)
       end
@@ -19,7 +19,7 @@ module Cv4SDK
     end
 
     def valid_token?(token)
-      res = Cv4SDK.request(:get, "/utils/tokens/#{token}", {})
+      Cv4SDK.request(:get, "/utils/tokens/#{token}", {})
     end
 
     class StaticStorage
