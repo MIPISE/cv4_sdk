@@ -1,17 +1,32 @@
 module Cv4SDK
   module Resources
     class Util < Base
+      UTILS_REQUESTS_SCOPES =
+        [
+          "categorieMIF",
+          "categories",
+          "civilites",
+          "departements",
+          "devises",
+          "etats-investisseur",
+          "forme-juridique",
+          "groupes-investisseurs",
+          "organes-direction",
+          "natures-operation-investissement",
+          "pays",
+          "roles",
+          "secteur-activite-ste",
+          "status-mandataire",
+          "statut-fiscal",
+          "type-beneficiaire",
+          "type-proprietaire-part",
+          "type-societe",
+          "types-role"
+        ]
       class << self
-        get_request "civilites"
-        get_request "departements"
-        get_request "forme-juridique"
-        get_request "organes-direction"
-        get_request "roles"
-        get_request "secteur-activite-ste"
-        get_request "status-mandataire"
-        get_request "type-beneficiaire"
-        get_request "type-societe"
-        get_request "types-role"
+        UTILS_REQUESTS_SCOPES.each do |scope|
+          get_request scope
+        end
 
         def get_id_from(list_scope, value)
           res = send(list_scope.gsub("-", "_"))

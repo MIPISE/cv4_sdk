@@ -7,13 +7,6 @@ module Cv4SDK
           CREATE_BENEFICIAIRE_WHITELIST_PARAMS = %w[crmIdSource crmIdBeneficiaire commentaire typeBeneficiaire dateDeclarationEffective dateDebut dateFin beneficiaireEffectif pourcentage crmId]
           def create_or_update(params)
             params = stringify_keys(params)
-            ["Source", "Beneficiaire", ""].each do |k|
-              if params&.has_key?("systemId#{k}")
-                # Because for some reason in API CV4 the name of the field for creation/modification is crmId,
-                # but it is then returned as systemId...
-                params["crmId#{k}"] = params.delete("systemId#{k}")
-              end
-            end
             params = params&.slice(*CREATE_BENEFICIAIRE_WHITELIST_PARAMS)
             Cv4SDK.request(:post, url, params)
           end

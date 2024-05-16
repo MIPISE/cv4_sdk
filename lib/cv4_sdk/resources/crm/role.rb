@@ -7,13 +7,6 @@ module Cv4SDK
           CREATE_ROLE_WHITELIST_PARAMS = %w[crmIdCible typeRole crmIdContact crmIdRepresentePar role dateDebut dateFin interventionDirect fonctionExacte organeDirection statutMandataire salaire]
           def create_or_update(params)
             params = stringify_keys(params)
-            ["Cible", "Contact", "RepresentePar"].each do |k|
-              if params&.has_key?("systemId#{k}")
-                # Because for some reason in API CV4 the name of the field for creation/modification is crmId,
-                # but it is then returned as systemId...
-                params["crmId#{k}"] = params.delete("systemId#{k}")
-              end
-            end
             params = params&.slice(*CREATE_ROLE_WHITELIST_PARAMS)
             Cv4SDK.request(:post, url, params)
           end

@@ -3,17 +3,40 @@ module Cv4SDK
     module Crm
       # This class handle both /personnes and crm/ endpoints data in CV4 (same data, named often as "Contact" in doc)
       class Personne < ::Cv4SDK::Resources::Base
+        CREATE_PERSONNE_PARAMS =
+          {
+            crmId: {type: :string, required: true},
+            nom: {type: :string, required: true},
+            prenom: {type: :string, required: true},
+            civilite: {type: :util_civilites},
+            adresse: {type: :string},
+            #city: {type: :string}, -> mentioned in pdf DOC BUT invalid params (BadRequest response when this is included)
+            codePostal: {type: :string},
+            ville: {type: :string},
+            pays: {type: :country_iso_alpha_2},
+            dateNaissance: {type: :date},
+            villeNaissance: {type: :string},
+            departementNaissance: {type: :util_departements},
+            paysNaissance: {type: :country_iso_alpha_2},
+            nationalite: {type: :country_iso_alpha_2},
+            email: {type: :email},
+            telephone: {type: :phone},
+            telephoneMobile: {type: :phone},
+            fax: {type: :string},
+            champsPersonnalises: {
+              type: :array,
+              params:
+                {
+                  property: {type: :investisseur_champs_personnalises, required: true},
+                  typeField: {type: :integer, required: true},
+                  typeEntity: {type: :value_42, required: true},
+                }
+            }
+          }
+
         class << self
-          CREATE_PERSONNE_WHITELIST_PARAMS = %w[crmId nom prenom civilite adresse city codePostal ville Pays dateNaissance villeNaissance departementNaissance paysNaissance nationalite email telephone telephoneMobile fax]
           def create_or_update(params)
-            params = stringify_keys(params)
-            if params&.has_key?("systemId")
-              # Because for some reason in API CV4 the name of the field for creation/modification is crmId,
-              # but it is then returned as systemId...
-              params["crmId"] = params.delete("systemId")
-            end
-            params = params&.slice(*CREATE_PERSONNE_WHITELIST_PARAMS)
-            Cv4SDK.request(:post, url, params)
+            Cv4SDK.request(:post, url, permitted_params(params, CREATE_PERSONNE_PARAMS))
           end
 
           LIST_WHITELIST_PARAMS = %w[nom prenom civilite ville email mobile fax adresse tel pays codePostal sort_by order limit offset]

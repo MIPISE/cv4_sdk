@@ -4,7 +4,7 @@ require "multi_json"
 
 module Cv4SDK
   module Request
-    def request(method, url_or_path, params={}, filters={}, headers: nil)
+    def request(method, url_or_path, params={}, filters={}, headers: nil, verbose: false)
       uri =
         if url_or_path =~ /\A#{api_uri}.*\z/
           URI(url_or_path)
@@ -13,6 +13,9 @@ module Cv4SDK
         end
       uri.query = URI.encode_www_form(filters) unless filters.nil? || filters.empty?
       headers ||= request_headers(auth_mode: (method.to_sym == :get ? :token : :credentials))
+      if verbose
+        puts "Request #{method.upcase} on #{uri.request_uri} - params : #{params} - filters : #{filters}"
+      end
       res = Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
         req = Net::HTTP::const_get(method.capitalize).new(uri.request_uri, headers)
         req.body = MultiJson.dump(params) unless params.empty?

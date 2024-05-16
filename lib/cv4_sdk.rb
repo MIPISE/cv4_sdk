@@ -7,6 +7,10 @@ require_relative "cv4_sdk/resources/crm/beneficiaire"
 require_relative "cv4_sdk/resources/crm/personne"
 require_relative "cv4_sdk/resources/crm/role"
 require_relative "cv4_sdk/resources/crm/societe"
+require_relative "cv4_sdk/resources/investisseurs/personne"
+require_relative "cv4_sdk/resources/investisseurs/societe"
+require_relative "cv4_sdk/resources/fond"
+require_relative "cv4_sdk/resources/operation"
 require_relative "cv4_sdk/resources/util"
 
 

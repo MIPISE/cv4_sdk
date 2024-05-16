@@ -11,3 +11,5 @@ def init_cv4_sdk
     config.api_version = ENV["CV4_API_VERSION"]
   end
 end
+
+@personne_jane_crm_id = 5
