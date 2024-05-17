@@ -41,7 +41,7 @@ test "investisseurs societe create or update" do
       [
         {
           systemId: newSocieteId,
-          raisonSociale: "#{newSocieteId} raison sociale",
+          raisonSociale: "ABC raison sociale",
           investisseur: { idExterne: newInvestisseurId }
         }
       ]

@@ -1,19 +1,10 @@
 module Cv4SDK
   module Resources
     class Operation < Base
-      class << self
-        def get_champs_personnalises
-          Cv4SDK.request(:get, url(scope: ["detailInvest", "champs-personnalises"]))
-        end
-
-        def list_fcp
-          Cv4SDK.request(:get, url(scope: "fcp"))
-        end
-
-        CREATE_UPDATE_ENGAGEMENT_PARAMS =
-          {
-            operations:
-              {
+      CREATE_UPDATE_ENGAGEMENT_PARAMS =
+        {
+          operations:
+            {
               type: :array,
               required: true,
               params:
@@ -51,10 +42,18 @@ module Cv4SDK
                     }
                 }
             }
-          }
+        }
+      class << self
+        def get_champs_personnalises
+          Cv4SDK.request(:get, url(scope: ["detailInvest", "champs-personnalises"]))
+        end
 
-        def create_or_update_engagement
-          Cv4SDK.request(:post, url(scope: "engagement"))
+        def list_fcp
+          Cv4SDK.request(:get, url(scope: "fcp"))
+        end
+
+        def create_or_update_engagement(params)
+          Cv4SDK.request(:post, url(scope: "engagement"), permitted_params(params, CREATE_UPDATE_ENGAGEMENT_PARAMS))
         end
       end
     end

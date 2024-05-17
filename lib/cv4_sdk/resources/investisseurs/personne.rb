@@ -90,7 +90,6 @@ module Cv4SDK
               Cv4SDK.request(:post, url, p)
             else
               puts message
-              binding.irb
             end
           end
         end

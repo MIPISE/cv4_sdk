@@ -8,12 +8,16 @@ module Cv4SDK
           Cv4SDK.request(:get, url(scope: ["plugin-outlook"]), {}, stringify_keys(filters)&.slice(*LIST_WHITELIST_PARAMS))
         end
 
-        def create_societe(params)
-          Cv4SDK.request(:post, url(scope: ["societe"]), params)
-        end
-
-        def create_personne(params)
-          url(scope: ["personne"])
+        def find(idExterne, limit: 200)
+          offset = 0
+          investisseurs_list = list(limit: limit, offset: offset)
+          investisseur_res = investisseurs_list.select { |i_hash| i_hash["idInvestisseur"] == idExterne.to_s }.first
+          while investisseur_res.nil? && investisseurs_list.count == limit
+            offset += limit
+            investisseurs_list = list(limit: limit, offset: offset)
+            investisseur_res = investisseurs_list.select { |i_hash| i_hash["idInvestisseur"] == idExterne.to_s }.first
+          end
+          investisseur_res
         end
       end
     end

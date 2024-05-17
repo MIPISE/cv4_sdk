@@ -34,7 +34,7 @@ module Cv4SDK
             end
           end
         end
-        
+
         def self.get_request(scope)
           define_method scope.gsub("-", "_") do
             Cv4SDK.request(:get, url(scope: scope))
