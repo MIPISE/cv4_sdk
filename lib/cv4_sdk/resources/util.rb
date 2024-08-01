@@ -1,6 +1,7 @@
 module Cv4SDK
   module Resources
     class Util < Base
+      # Cv4SDK::Resources::Util::UTILS_REQUESTS_SCOPES
       UTILS_REQUESTS_SCOPES =
         [
           "categorieMIF",

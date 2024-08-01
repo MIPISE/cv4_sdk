@@ -17,7 +17,6 @@ test "Operation engagement create or update" do
   idFonds = Cv4SDK::Resources::Fond.list_fcp.first["id"]
   idTitre = Cv4SDK::Resources::Fond.get_titres_list(idFonds).first["id"]
   typeOperId = Cv4SDK::Resources::Operation.list_fcp.select{|h| h["value"] == "Engagement" }.first["id"]
-  investisseurId = 100
   params =
     {
       operations:
@@ -26,7 +25,7 @@ test "Operation engagement create or update" do
             typeOperId: typeOperId,
             idTitre: idTitre,
             idFonds: idFonds,
-            idExternInvestisseur: investisseurId,
+            idExternInvestisseur: @investisseur_jane_external_id,
             quantite: "10",
             montant: "100",
             devise: "EUR"

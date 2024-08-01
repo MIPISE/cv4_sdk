@@ -24,6 +24,8 @@ module Cv4SDK
 
       if res.nil?
         return { "error" => { "code" => "408", "message" => "RequestTimeout for #{uri.request_uri}", "uri" => uri.request_uri, origin_params: params}}
+      else
+        puts "*** Successful request over #{uri.request_uri} ***" if verbose
       end
 
       body_data =

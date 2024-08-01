@@ -36,14 +36,30 @@ test "crm personne" do
   res = Cv4SDK::Resources::Crm::Personne.create_or_update(personne_params)
   assert res.is_a?(Hash)
   assert (res["message"] == "Opération effectuée avec succès")
-  res = Cv4SDK::Resources::Crm::Personne.get(systemId: 5)
-  assert res.is_a?(Hash)
-  assert (res["email"] == email)
+  pres = Cv4SDK::Resources::Crm::Personne.get(systemId: 5)
+  assert pres.is_a?(Hash)
+  assert (pres["email"] == email)
 end
 
 test "crm societe" do
   raisonSociale = "SomeRaisonSociale"
-  res = Cv4SDK::Resources::Crm::Societe.create_or_update({ systemId: 10, raisonSociale: raisonSociale, devise: "EUR" })
+  res =
+    Cv4SDK::Resources::Crm::Societe
+      .create_or_update(
+        {
+          systemId: 10,
+          adresse: "42 rue de la réponse",
+          codePostal: "42001",
+          ville: "HitchHicker",
+          pays: "GA",
+          email: "promail@test.com",
+          telephone: "0601020304",
+          raisonSociale: raisonSociale,
+          siren: "123456789123",
+          siret: "123456789",
+          devise: "EUR"
+        }
+      )
   assert res.is_a?(Hash)
   assert (res["message"] == "Opération effectuée avec succès")
   # TODO : those lines below do not work for societe !!!

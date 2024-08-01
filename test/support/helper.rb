@@ -13,3 +13,4 @@ def init_cv4_sdk
 end
 
 @personne_jane_crm_id = 5
+@investisseur_jane_external_id = 55

@@ -11,8 +11,6 @@ test "investisseurs list" do
 end
 
 test "investisseurs create or update for a personne" do
-  investisseur_id = 100
-  @personne_jane_crm_id
   params =
   {
     information:
@@ -22,7 +20,7 @@ test "investisseurs create or update for a personne" do
           nom: "Doe",
           prenom: "Jane",
           investisseur: {
-            idExterne: investisseur_id,
+            idExterne: @investisseur_jane_external_id,
             investisseurProfessionnel: "IP YES"
           }
         }
@@ -48,4 +46,12 @@ test "investisseurs societe create or update" do
     }
   res = Cv4SDK::Resources::Investisseurs::Societe.create_or_update(create_params)
   assert (res["message"] == "Opération enregistrée avec succès")
+end
+
+test "investisseurs get information" do
+  res = Cv4SDK::Resources::Investisseur.find(@investisseur_jane_external_id)
+  assert res.is_a?(Hash)
+  assert res.has_key?("information")
+  contact_res = res["information"].first
+  assert contact_res["crmId"] == @personne_jane_crm_id.to_s
 end

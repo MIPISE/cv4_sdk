@@ -35,8 +35,8 @@ module Cv4SDK
           }
 
         class << self
-          def create_or_update(params)
-            Cv4SDK.request(:post, url, permitted_params(params, CREATE_PERSONNE_PARAMS))
+          def create_or_update(params, verbose: false)
+            Cv4SDK.request(:post, url, permitted_params(params, CREATE_PERSONNE_PARAMS), verbose: verbose)
           end
 
           LIST_WHITELIST_PARAMS = %w[nom prenom civilite ville email mobile fax adresse tel pays codePostal sort_by order limit offset]
@@ -47,11 +47,11 @@ module Cv4SDK
           end
 
           # GET ONLY PARAMS : %w[addresse civilite codePostal email fax id mobile nom pays prenom systemId tel ville]
-          def get(systemId: nil, id: nil)
+          def get(systemId: nil, id: nil, verbose: false)
             if !id.nil?
-              Cv4SDK.request(:get, url(scope: [id&.to_s], namespace: "crm"))
+              Cv4SDK.request(:get, url(scope: [id&.to_s], namespace: "crm"), verbose: verbose)
             elsif !systemId.nil?
-              Cv4SDK.request(:get, url(scope: ["system_id", systemId&.to_s], namespace: "crm"))
+              Cv4SDK.request(:get, url(scope: ["system_id", systemId&.to_s], namespace: "crm"), verbose: verbose)
             end
           end
         end

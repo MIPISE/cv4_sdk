@@ -9,15 +9,7 @@ module Cv4SDK
         end
 
         def find(idExterne, limit: 200)
-          offset = 0
-          investisseurs_list = list(limit: limit, offset: offset)
-          investisseur_res = investisseurs_list.select { |i_hash| i_hash["idInvestisseur"] == idExterne.to_s }.first
-          while investisseur_res.nil? && investisseurs_list.count == limit
-            offset += limit
-            investisseurs_list = list(limit: limit, offset: offset)
-            investisseur_res = investisseurs_list.select { |i_hash| i_hash["idInvestisseur"] == idExterne.to_s }.first
-          end
-          investisseur_res
+          Cv4SDK.request(:get, url(idExterne&.to_s), {idExterne: idExterne&.to_s})
         end
       end
     end
