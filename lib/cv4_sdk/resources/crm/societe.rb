@@ -37,6 +37,10 @@ module Cv4SDK
           def create_or_update(params)
             Cv4SDK.request(:post, url, permitted_params(params, CREATE_UPDATE_PARAMS))
           end
+
+          def get(crmId, verbose: false)
+            Cv4SDK.request(:get, url(crmId&.to_s), verbose: verbose)
+          end
         end
       end
     end

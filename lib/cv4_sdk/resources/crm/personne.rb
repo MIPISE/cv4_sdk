@@ -46,13 +46,8 @@ module Cv4SDK
             Cv4SDK.request(:get, url(namespace: "crm"), {}, stringify_keys(filters)&.slice(*LIST_WHITELIST_PARAMS))
           end
 
-          # GET ONLY PARAMS : %w[addresse civilite codePostal email fax id mobile nom pays prenom systemId tel ville]
-          def get(systemId: nil, id: nil, verbose: false)
-            if !id.nil?
-              Cv4SDK.request(:get, url(scope: [id&.to_s], namespace: "crm"), verbose: verbose)
-            elsif !systemId.nil?
-              Cv4SDK.request(:get, url(scope: ["system_id", systemId&.to_s], namespace: "crm"), verbose: verbose)
-            end
+          def get(crmId, verbose: false)
+            Cv4SDK.request(:get, url(crmId&.to_s), verbose: verbose)
           end
         end
       end

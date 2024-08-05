@@ -18,6 +18,10 @@ module Cv4SDK
       token
     end
 
+    def remove_token
+      storage.store(nil)
+    end
+
     def valid_token?(token)
       Cv4SDK.request(:get, "/utils/tokens/#{token}", {})
     end

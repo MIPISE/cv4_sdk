@@ -36,18 +36,19 @@ test "crm personne" do
   res = Cv4SDK::Resources::Crm::Personne.create_or_update(personne_params)
   assert res.is_a?(Hash)
   assert (res["message"] == "Opération effectuée avec succès")
-  pres = Cv4SDK::Resources::Crm::Personne.get(systemId: 5)
+  pres = Cv4SDK::Resources::Crm::Personne.get(@personne_jane_crm_id)
   assert pres.is_a?(Hash)
   assert (pres["email"] == email)
 end
 
 test "crm societe" do
-  raisonSociale = "SomeRaisonSociale"
+  raisonSociale = "SomeRaisonSociale#{Time.now.to_i}"
+  crmId = 10
   res =
     Cv4SDK::Resources::Crm::Societe
       .create_or_update(
         {
-          systemId: 10,
+          systemId: crmId,
           adresse: "42 rue de la réponse",
           codePostal: "42001",
           ville: "HitchHicker",
@@ -62,11 +63,9 @@ test "crm societe" do
       )
   assert res.is_a?(Hash)
   assert (res["message"] == "Opération effectuée avec succès")
-  # TODO : those lines below do not work for societe !!!
-  # TODO : find out how to get this kind of data !!!
-  # res = Cv4SDK::Resources::Crm::Resource.get(systemId: 10)
-  # assert res.is_a?(Hash)
-  # assert (res["raisonSociale"] == raisonSociale)
+  res = Cv4SDK::Resources::Crm::Societe.get(crmId)
+  assert res.is_a?(Hash)
+  assert (res["raisonSociale"] == raisonSociale)
 end
 
 test "crm beneficiary link to societe" do
