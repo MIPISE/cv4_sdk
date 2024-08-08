@@ -8,14 +8,19 @@ module Cv4SDK
       @@storage = storage
     end
 
-    def get_token
+    def get_token(verbose: false)
       token = storage.get
       if token.nil?
-        res = Cv4SDK.request(:get, "/authentifications/head", {}, headers: request_headers(auth_mode: :credentials))
-        token = res["token"]
+        token = new_token(verbose: verbose)
         storage.store(token)
       end
+      puts "returned token : <#{token}>" if verbose
       token
+    end
+
+    def new_token(verbose: false)
+      res = Cv4SDK.request(:get, "/authentifications/head", {}, headers: request_headers(auth_mode: :credentials, verbose: verbose), verbose: verbose)
+      res["token"]
     end
 
     def remove_token

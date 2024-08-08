@@ -3,6 +3,7 @@ require "dotenv/load"
 require_relative "../../lib/cv4_sdk"
 
 def init_cv4_sdk
+  Cv4SDK.remove_token
   Cv4SDK.configure do |config|
     config.api_root_url = ENV["CV4_BASE_URL"]
     config.api_scope = ENV["CV4_API_SCOPE"]

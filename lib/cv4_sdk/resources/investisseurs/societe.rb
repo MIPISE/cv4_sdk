@@ -91,6 +91,7 @@ module Cv4SDK
               Cv4SDK.request(:post, url, p)
             else
               puts message
+              {"error" => {"code" => "0000", "message" => message}}
             end
           end
         end
