@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "cv4_sdk"
-  s.version = "1.0.0"
+  s.version = "2.0.0"
   s.summary = "Gem for CV4 API"
   s.description = "Gem for CV4 API"
   s.authors = ["Berlimioz"]
