@@ -64,7 +64,7 @@ module Cv4SDK
                                   },
                                 contactAssocies:
                                   {
-                                    type: :hash,
+                                    type: :array,
                                     required: false,
                                     params:
                                       {
