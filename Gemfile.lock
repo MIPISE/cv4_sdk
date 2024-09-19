@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    cv4_sdk (1.0.0)
+    cv4_sdk (2.0.0)
       activesupport (>= 6.1.5)
 
 GEM
