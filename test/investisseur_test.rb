@@ -33,6 +33,7 @@ end
 test "investisseurs societe create or update" do
   newSocieteId = Time.now.to_i
   newInvestisseurId = Time.now.to_i + 1
+  newInvestisseurContactId = Time.now.to_i + 2
   create_params =
     {
       information:
@@ -40,7 +41,7 @@ test "investisseurs societe create or update" do
         {
           systemId: newSocieteId,
           raisonSociale: "ABC raison sociale",
-          investisseur: { idExterne: newInvestisseurId }
+          investisseur: { idExterne: newInvestisseurId, contactAssocies: [{crmId: newInvestisseurContactId, nom: "ContactTestNom", prenom: "ContactTestPrenom" }] }
         }
       ]
     }
